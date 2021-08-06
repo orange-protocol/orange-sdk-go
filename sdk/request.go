@@ -40,8 +40,8 @@ var (
 	`
 
 	GetAlgorithmProviderMethodsReq = `
-		query{
-			getAlgorithmMethods(did:$did){
+		query getAlgorithmMethods($apdid:String!){
+			getAlgorithmMethods(did:$apdid){
 				name,
 				paramSchema,
 				resultSchema
@@ -50,8 +50,8 @@ var (
 	`
 
 	GetDataProviderMethodsReq = `
-		query{
-			getDataMethods(did:$did){
+		query getDataMethods($dpdid:String!){
+			getDataMethods(did:$dpdid){
 				name,
 				paramSchema,
 				resultSchema
@@ -59,6 +59,11 @@ var (
 		}
 	`
 
+	//GetOscoreReq = `
+	//	mutation requestOscore($data:RequestOscoreReq!){
+	//			requestOscore(input:$data)
+	//	}
+	//`
 	GetOscoreReq = `
 		mutation{
 				requestOscore(input:{
@@ -69,13 +74,13 @@ var (
 					dpdid:$dpdid,
 					dpmethod:$dpmethod,
 					overwriteOld:$overwriteOld,
-					wallets:[%walletsinfo%]
+					wallets:[$walletsinfo$]
 				})
 		}
 	`
 
 	GetUserTask = `
-		query{
+		query getUserTask($key:String!,$taskId:Int!){
 			getUserTask(key:$key,taskId:$taskId){
 				taskId,
 				userDID,

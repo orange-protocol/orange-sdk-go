@@ -14,17 +14,19 @@ func main() {
 	client := graphql.NewClient("http://localhost:8080/query")
 
 	// make a request
-	//req := graphql.NewRequest(`
-	//	query{
-	//		getAllAlgorithmProviders(){
-	//			name,did
-	//		}
-	//	}
-	//`)
-	req := graphql.NewRequest(sdk.GetAllAlgorithmProvidersReq)
+	req := graphql.NewRequest(`
+		query getAlgorithmMethods($apdid:String!){
+			getAlgorithmMethods(did:$apdid){
+				name,
+				paramSchema,
+				resultSchema
+			}
+		}
+	`)
+	//req := graphql.NewRequest(sdk.GetAllAlgorithmProvidersReq)
 
 	// set any variables
-	req.Var("", "")
+	req.Var("$apdid", "did:ont:testap")
 
 	// set header fields
 	req.Header.Set("Cache-Control", "no-cache")
@@ -33,13 +35,13 @@ func main() {
 	ctx := context.Background()
 
 	// run it and capture the response
-	var respData sdk.GetAlgorithmProvidersResp
+	var respData sdk.GetAlgorithmProviderMethodResp
 	if err := client.Run(ctx, req, &respData); err != nil {
 		log.Fatal(err)
 	}
 	fmt.Printf("%v\n", respData)
-	for _, al := range respData.GetAllAlgorithmProviders {
+	for _, al := range respData.GetAlgorithmProviderMethods {
 		fmt.Printf("name:%s\n", al.Name)
-		fmt.Printf("did:%s\n", al.Did)
+		fmt.Printf("did:%s\n", al.ResultSchema)
 	}
 }

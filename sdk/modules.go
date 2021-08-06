@@ -39,14 +39,14 @@ type ProviderMethod struct {
 }
 
 type RequestOscoreReq struct {
-	Key      string        `json:"key"`
-	Did      string        `json:"did"`
-	Apdid    string        `json:"apdid"`
-	Apmethod string        `json:"apmethod"`
-	Dpdid    string        `json:"dpdid"`
-	Dpmethod string        `json:"dpmethod"`
-	overwriteOld bool      `json:"overwriteOld"`
-	Wallets  []*UserWallet `json:"wallets"`
+	Key          string        `json:"key"`
+	Did          string        `json:"did"`
+	Apdid        string        `json:"apdid"`
+	Apmethod     string        `json:"apmethod"`
+	Dpdid        string        `json:"dpdid"`
+	Dpmethod     string        `json:"dpmethod"`
+	overwriteOld bool          `json:"overwriteOld"`
+	Wallets      []*UserWallet `json:"wallets"`
 }
 
 type UserWallet struct {
@@ -91,4 +91,8 @@ type GetDataProvidersResp struct {
 
 type GetUserTaskResp struct {
 	GetUserTask *UserTasks `json:"getUserTask"`
+}
+
+type GetOscoreResp struct {
+	Oscore int64 `json:"requestOscore"`
 }

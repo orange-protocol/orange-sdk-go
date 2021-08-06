@@ -2,6 +2,7 @@ package sdk
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"strings"
 
@@ -36,7 +37,7 @@ func (sdk *OscoreSDK) GetDataProviders() ([]*DataProvider, error) {
 
 func (sdk *OscoreSDK) GetAlgorithmMethods(apdid string) ([]*ProviderMethod, error) {
 	req := graphql.NewRequest(GetAlgorithmProviderMethodsReq)
-	req.Var("did", apdid)
+	req.Var("apdid", apdid)
 	resp := &GetAlgorithmProviderMethodResp{}
 	err := sdk.sendRequest(req, resp)
 
@@ -44,7 +45,7 @@ func (sdk *OscoreSDK) GetAlgorithmMethods(apdid string) ([]*ProviderMethod, erro
 }
 func (sdk *OscoreSDK) GetDataMethods(dpdid string) ([]*ProviderMethod, error) {
 	req := graphql.NewRequest(GetDataProviderMethodsReq)
-	req.Var("did", dpdid)
+	req.Var("dpdid", dpdid)
 	resp := &GetDataProviderMethodResp{}
 	err := sdk.sendRequest(req, resp)
 
@@ -52,7 +53,20 @@ func (sdk *OscoreSDK) GetDataMethods(dpdid string) ([]*ProviderMethod, error) {
 }
 
 func (sdk *OscoreSDK) RequestOscore(roreq *RequestOscoreReq) (int64, error) {
-	req := graphql.NewRequest(getRequestOscoreReqStr(roreq.Wallets))
+	//todo currently struct input param cannot be passed
+	//req := graphql.NewRequest(GetOscoreReq)
+	//reqjson ,err:= json.Marshal(req)
+	//if err != nil{
+	//	return  -1,err
+	//}
+	//req.Var("data",roreq)
+	//var resp int64 = -1
+	//err := sdk.sendRequest(req, resp)
+	//return resp, err
+
+	tmps := getRequestOscoreReqStr(roreq)
+	fmt.Printf("%s\n", tmps)
+	req := graphql.NewRequest(tmps)
 
 	req.Var("key", roreq.Key)
 	req.Var("did", roreq.Did)
@@ -60,16 +74,19 @@ func (sdk *OscoreSDK) RequestOscore(roreq *RequestOscoreReq) (int64, error) {
 	req.Var("apmethod", roreq.Apmethod)
 	req.Var("dpdid", roreq.Dpdid)
 	req.Var("dpmethod", roreq.Dpmethod)
-	req.Var("overwriteOld",roreq.overwriteOld)
+	req.Var("overwriteOld", roreq.overwriteOld)
 	for i, wallet := range roreq.Wallets {
 		req.Var(fmt.Sprintf("chain-%d", i), wallet.Chain)
 		req.Var(fmt.Sprintf("address-%d", i), wallet.Address)
 		req.Var(fmt.Sprintf("pubkey-%d", i), wallet.Pubkey)
 		req.Var(fmt.Sprintf("sig-%d", i), wallet.Sig)
 	}
-	var resp int64 = -1
+	tmp, _ := json.Marshal(req.Vars())
+	fmt.Printf("vars:%s\n", tmp)
+
+	resp := &GetOscoreResp{}
 	err := sdk.sendRequest(req, resp)
-	return resp, err
+	return resp.Oscore, err
 }
 
 func (sdk *OscoreSDK) GetUserTask(key string, taskId int64) (*UserTasks, error) {
@@ -83,17 +100,18 @@ func (sdk *OscoreSDK) GetUserTask(key string, taskId int64) (*UserTasks, error) 
 	return resp.GetUserTask, err
 }
 
-func getRequestOscoreReqStr(wallets []*UserWallet) string {
-
+func getRequestOscoreReqStr(req *RequestOscoreReq) string {
+	s := "mutation{requestOscore(input:{key:\"%s\",did:\"%s\",apdid:\"%s\",apmethod:\"%s\",dpdid:\"%s\",dpmethod:\"%s\",overwriteOld:%v,wallets:[$walletsinfo$]})}"
 	str := ""
-	for i, _ := range wallets {
+	for _, w := range req.Wallets {
 		if len(str) == 0 {
-			str = str + fmt.Sprintf("{chain:$chain-%d,address:$address-%d,pubkey:$pubkey-%d,sig:$sig-%d}", i, i, i, i)
+			str = str + fmt.Sprintf("{chain:\"%s\",address:\"%s\",pubkey:\"%s\",sig:\"%s\"}", w.Chain, w.Address, w.Pubkey, w.Sig)
 		} else {
-			str = str + "," + fmt.Sprintf("{chain:$chain-%d,address:$address-%d,pubkey:$pubkey-%d,sig:$sig-%d}", i, i, i, i)
+			str = str + "," + fmt.Sprintf("{chain:\"%s\",address:\"%s\",pubkey:\"%s\",sig:\"%s\"}", w.Chain, w.Address, w.Pubkey, w.Sig)
 		}
 	}
-	return strings.Replace(GetOscoreReq, "%walletsinfo%", str, 0)
+	s = strings.ReplaceAll(s, "$walletsinfo$", str)
+	return fmt.Sprintf(s, req.Key, req.Did, req.Apdid, req.Apmethod, req.Dpdid, req.Dpmethod, req.overwriteOld)
 }
 
 func (sdk *OscoreSDK) sendRequest(req *graphql.Request, resp interface{}) error {

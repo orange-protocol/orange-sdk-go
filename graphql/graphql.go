@@ -63,7 +63,7 @@ type Client struct {
 func NewClient(endpoint string, opts ...ClientOption) *Client {
 	c := &Client{
 		endpoint: endpoint,
-		Log:      func(string) {},
+		Log:      func(str string) { fmt.Printf("%s\n", str) },
 	}
 	for _, optionFunc := range opts {
 		optionFunc(c)
@@ -119,6 +119,7 @@ func (c *Client) runWithJSON(ctx context.Context, req *Request, resp interface{}
 	if err != nil {
 		return err
 	}
+	c.logf(">>request:%v", r.Body)
 	r.Close = c.closeReq
 	r.Header.Set("Content-Type", "application/json; charset=utf-8")
 	r.Header.Set("Accept", "application/json; charset=utf-8")
