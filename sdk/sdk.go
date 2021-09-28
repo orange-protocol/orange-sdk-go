@@ -68,19 +68,19 @@ func (sdk *OscoreSDK) RequestOscore(roreq *RequestOscoreReq) (int64, error) {
 	fmt.Printf("%s\n", tmps)
 	req := graphql.NewRequest(tmps)
 
-	req.Var("key", roreq.Key)
-	req.Var("did", roreq.Did)
-	req.Var("apdid", roreq.Apdid)
-	req.Var("apmethod", roreq.Apmethod)
-	req.Var("dpdid", roreq.Dpdid)
-	req.Var("dpmethod", roreq.Dpmethod)
-	req.Var("overwriteOld", roreq.overwriteOld)
-	for i, wallet := range roreq.Wallets {
-		req.Var(fmt.Sprintf("chain-%d", i), wallet.Chain)
-		req.Var(fmt.Sprintf("address-%d", i), wallet.Address)
-		req.Var(fmt.Sprintf("pubkey-%d", i), wallet.Pubkey)
-		req.Var(fmt.Sprintf("sig-%d", i), wallet.Sig)
-	}
+	//req.Var("key", roreq.Key)
+	//req.Var("did", roreq.Did)
+	//req.Var("apdid", roreq.Apdid)
+	//req.Var("apmethod", roreq.Apmethod)
+	//req.Var("dpdid", roreq.Dpdid)
+	//req.Var("dpmethod", roreq.Dpmethod)
+	//req.Var("overwriteOld", roreq.overwriteOld)
+	//for i, wallet := range roreq.Wallets {
+	//	req.Var(fmt.Sprintf("chain-%d", i), wallet.Chain)
+	//	req.Var(fmt.Sprintf("address-%d", i), wallet.Address)
+	//	req.Var(fmt.Sprintf("pubkey-%d", i), wallet.Pubkey)
+	//	req.Var(fmt.Sprintf("sig-%d", i), wallet.Sig)
+	//}
 	tmp, _ := json.Marshal(req.Vars())
 	fmt.Printf("vars:%s\n", tmp)
 
@@ -101,9 +101,10 @@ func (sdk *OscoreSDK) GetUserTask(key string, taskId int64) (*UserTasks, error) 
 }
 
 func getRequestOscoreReqStr(req *RequestOscoreReq) string {
-	s := "mutation{requestOscore(input:{key:\"%s\",did:\"%s\",apdid:\"%s\",apmethod:\"%s\",dpdid:\"%s\",dpmethod:\"%s\",overwriteOld:%v,wallets:[$walletsinfo$]})}"
+	//s := "mutation{requestOscore(input:{key:\"%s\",did:\"%s\",apdid:\"%s\",apmethod:\"%s\",dpdid:\"%s\",dpmethod:\"%s\",overwriteOld:%v,wallets:[$walletsinfo$]})}"
+	s := "mutation{requestOscore(input:{appdid:\"%s\",data:{userdid:\"%s\",apdid:\"%s\",apmethod:\"%s\",dpdid:\"%s\",dpmethod:\"%s\",overwriteOld:%v,wallets:[$walletsinfo$]},sig:\"%s\"})}"
 	str := ""
-	for _, w := range req.Wallets {
+	for _, w := range req.Data.Wallets {
 		if len(str) == 0 {
 			str = str + fmt.Sprintf("{chain:\"%s\",address:\"%s\",pubkey:\"%s\",sig:\"%s\"}", w.Chain, w.Address, w.Pubkey, w.Sig)
 		} else {
@@ -111,7 +112,7 @@ func getRequestOscoreReqStr(req *RequestOscoreReq) string {
 		}
 	}
 	s = strings.ReplaceAll(s, "$walletsinfo$", str)
-	return fmt.Sprintf(s, req.Key, req.Did, req.Apdid, req.Apmethod, req.Dpdid, req.Dpmethod, req.overwriteOld)
+	return fmt.Sprintf(s, req.AppDid, req.Data.Userdid, req.Data.Apdid, req.Data.Apmethod, req.Data.Dpdid, req.Data.Dpmethod, req.Data.OverwriteOld,req.Sig)
 }
 
 func (sdk *OscoreSDK) sendRequest(req *graphql.Request, resp interface{}) error {
