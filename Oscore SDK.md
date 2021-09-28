@@ -8,7 +8,7 @@ oscore server 使用 [graphql](https://graphql.org/) 作为对外的API 协议�
 
 ## 2. API KEY 的申请
 
-调用oscore sdk api需要申请 API key
+调用oscore sdk api需要注册DID
 
 申请入口 ：[TBD](https://oscore.com/applyapikey)
 
@@ -75,7 +75,26 @@ type UserTasks {
     issueTxhash:String
 }
 
-
+input RequestOscoreReq{
+    appdid:String!
+    data:RequestOscoreData!
+    sig:String!
+}
+input RequestOscoreData {
+    userdid:String!
+    apdid:String!
+    apmethod:String!
+    dpdid:String!
+    dpmethod:String!
+    overwriteOld:Boolean!
+    wallets:[UserWallet!]!
+}
+input UserWallet{
+    chain:String!
+    address:String!
+    pubkey:String!
+    sig:String!
+}
 
 type Query {
   getAllAlgorithmProviders:[AlgorithmProvider!]!
@@ -211,14 +230,20 @@ return int64
 
 ```
 type RequestOscoreReq struct {
-	Key          string        `json:"key"`                     //apikey
-	Did          string        `json:"did"`                     //用户的DID
-	Apdid        string        `json:"apdid"`                   //算法提供方的DID
-	Apmethod     string        `json:"apmethod"`                //算法提供方的接口名称 
-	Dpdid        string        `json:"dpdid"`                   //数据提供方的DID
-	Dpmethod     string        `json:"dpmethod"`                //数据提供方的接口名称    
-	overwriteOld bool          `json:"overwriteOld"`            //是否覆盖之前已存在的task
-	Wallets      []*UserWallet `json:"wallets"`                 //用户钱包信息 
+	AppDid string            `json:"appDid"`                    //app did
+	Data   RequestOscoreData `json:"data"`                      //request data
+	Sig    string            `json:"sig"`                       //signature for data by did  
+}
+
+type RequestOscoreData struct {
+	Userdid      string        `json:"userDid"`                 //用户的DID
+    Apdid        string        `json:"apdid"`                   //算法提供方的DID
+    Apmethod     string        `json:"apmethod"`                //算法提供方的接口名称 
+    Dpdid        string        `json:"dpdid"`                   //数据提供方的DID
+    Dpmethod     string        `json:"dpmethod"`                //数据提供方的接口名称    
+    overwriteOld bool          `json:"overwriteOld"`            //是否覆盖之前已存在的task
+    Wallets      []*UserWallet `json:"wallets"`                 //用户钱包信息 
+
 }
 type UserWallet struct {
 	Chain   string `json:"chain"`                               //链的名称 “eth" ,"bsc"等
@@ -241,7 +266,7 @@ type UserWallet struct {
 
 parameters: key string            //apikey
 
-​						taskId int64       //taskid
+​	        taskId int64          //taskid
 
 return :  *UserTasks
 

@@ -67,8 +67,8 @@ func TestOscoreSDK_RequestOscore(t *testing.T) {
 	sdk, err := NewOscoreSDK("http://localhost:8080/query")
 	assert.Nil(t, err)
 	req := &RequestOscoreReq{
-		AppDid:"did:ont:ARNzB1pTkG61NDwxwzJfNJF8BqcZjpfNev",
-		Data:RequestOscoreData{
+		AppDid: "did:ont:ARNzB1pTkG61NDwxwzJfNJF8BqcZjpfNev",
+		Data: RequestOscoreData{
 			Userdid:      "did:ont:AGAMr5P2Ngi7SGvhKd3s5vWTWpid5uGywL",
 			Apdid:        "did:ont:testap",
 			Apmethod:     "calc30xWithDefi",
@@ -83,7 +83,7 @@ func TestOscoreSDK_RequestOscore(t *testing.T) {
 			},
 			},
 		},
-		Sig:"43319a9c43d777b32b8320dbdfce32bb61c8314f81b10c838ad57bde57306ddf38cfabd64c33212d60f73e051534967015cd3222675892332a6ba5c521f59bba",
+		Sig: "43319a9c43d777b32b8320dbdfce32bb61c8314f81b10c838ad57bde57306ddf38cfabd64c33212d60f73e051534967015cd3222675892332a6ba5c521f59bba",
 	}
 
 	//tmp ,_:= json.Marshal(req.Data)

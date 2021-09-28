@@ -53,34 +53,10 @@ func (sdk *OscoreSDK) GetDataMethods(dpdid string) ([]*ProviderMethod, error) {
 }
 
 func (sdk *OscoreSDK) RequestOscore(roreq *RequestOscoreReq) (int64, error) {
-	//todo currently struct input param cannot be passed
-	//req := graphql.NewRequest(GetOscoreReq)
-	//reqjson ,err:= json.Marshal(req)
-	//if err != nil{
-	//	return  -1,err
-	//}
-	//req.Var("data",roreq)
-	//var resp int64 = -1
-	//err := sdk.sendRequest(req, resp)
-	//return resp, err
-
 	tmps := getRequestOscoreReqStr(roreq)
 	fmt.Printf("%s\n", tmps)
 	req := graphql.NewRequest(tmps)
 
-	//req.Var("key", roreq.Key)
-	//req.Var("did", roreq.Did)
-	//req.Var("apdid", roreq.Apdid)
-	//req.Var("apmethod", roreq.Apmethod)
-	//req.Var("dpdid", roreq.Dpdid)
-	//req.Var("dpmethod", roreq.Dpmethod)
-	//req.Var("overwriteOld", roreq.overwriteOld)
-	//for i, wallet := range roreq.Wallets {
-	//	req.Var(fmt.Sprintf("chain-%d", i), wallet.Chain)
-	//	req.Var(fmt.Sprintf("address-%d", i), wallet.Address)
-	//	req.Var(fmt.Sprintf("pubkey-%d", i), wallet.Pubkey)
-	//	req.Var(fmt.Sprintf("sig-%d", i), wallet.Sig)
-	//}
 	tmp, _ := json.Marshal(req.Vars())
 	fmt.Printf("vars:%s\n", tmp)
 
@@ -101,7 +77,6 @@ func (sdk *OscoreSDK) GetUserTask(key string, taskId int64) (*UserTasks, error) 
 }
 
 func getRequestOscoreReqStr(req *RequestOscoreReq) string {
-	//s := "mutation{requestOscore(input:{key:\"%s\",did:\"%s\",apdid:\"%s\",apmethod:\"%s\",dpdid:\"%s\",dpmethod:\"%s\",overwriteOld:%v,wallets:[$walletsinfo$]})}"
 	s := "mutation{requestOscore(input:{appdid:\"%s\",data:{userdid:\"%s\",apdid:\"%s\",apmethod:\"%s\",dpdid:\"%s\",dpmethod:\"%s\",overwriteOld:%v,wallets:[$walletsinfo$]},sig:\"%s\"})}"
 	str := ""
 	for _, w := range req.Data.Wallets {
@@ -112,7 +87,7 @@ func getRequestOscoreReqStr(req *RequestOscoreReq) string {
 		}
 	}
 	s = strings.ReplaceAll(s, "$walletsinfo$", str)
-	return fmt.Sprintf(s, req.AppDid, req.Data.Userdid, req.Data.Apdid, req.Data.Apmethod, req.Data.Dpdid, req.Data.Dpmethod, req.Data.OverwriteOld,req.Sig)
+	return fmt.Sprintf(s, req.AppDid, req.Data.Userdid, req.Data.Apdid, req.Data.Apmethod, req.Data.Dpdid, req.Data.Dpmethod, req.Data.OverwriteOld, req.Sig)
 }
 
 func (sdk *OscoreSDK) sendRequest(req *graphql.Request, resp interface{}) error {

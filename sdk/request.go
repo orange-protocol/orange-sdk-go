@@ -58,12 +58,6 @@ var (
 			}
 		}
 	`
-
-	//GetOscoreReq = `
-	//	mutation requestOscore($data:RequestOscoreReq!){
-	//			requestOscore(input:$data)
-	//	}
-	//`
 	GetOscoreReq = `
 		mutation{
 				requestOscore(input:{
