@@ -39,17 +39,17 @@ type ProviderMethod struct {
 }
 
 type RequestOscoreData struct {
-	Userdid      string        `json:"userDid"`
-	Apdid        string        `json:"apDid"`
-	Apmethod     string        `json:"apMethod"`
-	Dpdid        string        `json:"dpDid"`
-	Dpmethod     string        `json:"dpMethod"`
+	Userdid      string        `json:"userdid"`
+	Apdid        string        `json:"apdid"`
+	Apmethod     string        `json:"apmethod"`
+	Dpdid        string        `json:"dpdid"`
+	Dpmethod     string        `json:"dpmethod"`
 	OverwriteOld bool          `json:"overwriteOld"`
 	Wallets      []*UserWallet `json:"wallets"`
 }
 
 type RequestOscoreReq struct {
-	AppDid string            `json:"appDid"`
+	AppDid string            `json:"appdid"`
 	Data   RequestOscoreData `json:"data"`
 	Sig    string            `json:"sig"`
 }

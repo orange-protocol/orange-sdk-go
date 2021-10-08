@@ -1,14 +1,14 @@
-# Oscore SDK 
+# Orange Server SDK 
 
 ## 1. 简介
 
-oscore server 使用 [graphql](https://graphql.org/) 作为对外的API 协议，本SDK 是对面向开发者和第三方的接口的封装
+orange server 使用 [graphql](https://graphql.org/) 作为对外的API 协议，本SDK 是对面向开发者和第三方的接口的封装
 
 
 
 ## 2. API KEY 的申请
 
-调用oscore sdk api需要注册DID
+orange sdk api需要注册DID
 
 申请入口 ：[TBD](https://oscore.com/applyapikey)
 

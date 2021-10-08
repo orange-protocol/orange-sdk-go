@@ -1,9 +1,12 @@
 package sdk
 
 import (
+	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"testing"
 
+	ontsdk "github.com/ontio/ontology-go-sdk"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -72,7 +75,7 @@ func TestOscoreSDK_RequestOscore(t *testing.T) {
 			Userdid:      "did:ont:AGAMr5P2Ngi7SGvhKd3s5vWTWpid5uGywL",
 			Apdid:        "did:ont:testap",
 			Apmethod:     "calc30xWithDefi",
-			Dpdid:        "did:ont:abcdefg",
+			Dpdid:        "did:ont:AS1QrBpgiPtPoggSU4YRyYNFBtCRnBMaDU",
 			Dpmethod:     "queryXdaysSumWithDefi",
 			OverwriteOld: true,
 			Wallets: []*UserWallet{{
@@ -83,12 +86,25 @@ func TestOscoreSDK_RequestOscore(t *testing.T) {
 			},
 			},
 		},
-		Sig: "43319a9c43d777b32b8320dbdfce32bb61c8314f81b10c838ad57bde57306ddf38cfabd64c33212d60f73e051534967015cd3222675892332a6ba5c521f59bba",
+		Sig: "",
 	}
 
-	//tmp ,_:= json.Marshal(req.Data)
+	osdk := ontsdk.NewOntologySdk()
+	w,err := osdk.OpenWallet("../wallet.dat")
+	assert.Nil(t,err)
+	signer ,err := w.GetAccountByAddress("ARNzB1pTkG61NDwxwzJfNJF8BqcZjpfNev",[]byte("123456"))
+	assert.Nil(t,err)
+	dataToSign,err := json.Marshal(req.Data)
+	assert.Nil(t,err)
+	fmt.Printf("data:%s\n",dataToSign)
+	sig ,err:= signer.Sign(dataToSign)
+	assert.Nil(t,err)
+	req.Sig = hex.EncodeToString(sig)
+
+	tmp ,_:= json.Marshal(req)
 	//tmphex := hex.EncodeToString(tmp)
 	//fmt.Printf("%s",tmphex)
+	fmt.Printf("req:%s\n",tmp)
 
 	taskid, err := sdk.RequestOscore(req)
 	assert.Nil(t, err)
