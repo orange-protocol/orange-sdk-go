@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/oscore/oscore-sdk-go/graphql"
+	"github.com/orange-protocol/orange-sdk-go/graphql"
 )
 
 type OscoreSDK struct {

@@ -1,2 +1,2 @@
-# oscore-sdk-go
-oscore sdk
+# orange-sdk-go
+orange sdk

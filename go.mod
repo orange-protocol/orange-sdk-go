@@ -1,4 +1,4 @@
-module github.com/oscore/oscore-sdk-go
+module github.com/orange-protocol/orange-sdk-go
 
 go 1.15
 

@@ -10,7 +10,7 @@ orange server 使用 [graphql](https://graphql.org/) 作为对外的API 协议�
 
 orange sdk api需要注册DID
 
-申请入口 ：[TBD](https://oscore.com/applyapikey)
+申请入口 ：[TBD](https://app.orangeprotocol.io/business)
 
 
 
@@ -216,7 +216,7 @@ type ProviderMethod struct {
 
 
 
-### 3.5 申请计算oscore
+### 3.5 申请计算Orange score
 
 申请计算OScore, 计算是一个异步过程，本次只返回申请的task id
 
@@ -256,7 +256,7 @@ type UserWallet struct {
 
 
 
-### 3.6 查询用户OScore task
+### 3.6 查询用户Orange score task
 
 根据task id 查询oscore task 信息
 
@@ -298,7 +298,7 @@ golang
 add dependency in go.mod
 
 ```
-github.com/oscore/oscore-sdk-go latest
+github.com/orange-protocol/orange-sdk-go latest
 ```
 
 ```golang

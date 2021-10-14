@@ -66,7 +66,6 @@ func TestOscoreSDK_GetDataMethods(t *testing.T) {
 }
 
 func TestOscoreSDK_RequestOscore(t *testing.T) {
-	//sdk, err := NewOscoreSDK("http://172.168.3.38:8080/query")
 	sdk, err := NewOscoreSDK("http://localhost:8080/query")
 	assert.Nil(t, err)
 	req := &RequestOscoreReq{
@@ -90,21 +89,21 @@ func TestOscoreSDK_RequestOscore(t *testing.T) {
 	}
 
 	osdk := ontsdk.NewOntologySdk()
-	w,err := osdk.OpenWallet("../wallet.dat")
-	assert.Nil(t,err)
-	signer ,err := w.GetAccountByAddress("ARNzB1pTkG61NDwxwzJfNJF8BqcZjpfNev",[]byte("123456"))
-	assert.Nil(t,err)
-	dataToSign,err := json.Marshal(req.Data)
-	assert.Nil(t,err)
-	fmt.Printf("data:%s\n",dataToSign)
-	sig ,err:= signer.Sign(dataToSign)
-	assert.Nil(t,err)
+	w, err := osdk.OpenWallet("../wallet.dat")
+	assert.Nil(t, err)
+	signer, err := w.GetAccountByAddress("ARNzB1pTkG61NDwxwzJfNJF8BqcZjpfNev", []byte("123456"))
+	assert.Nil(t, err)
+	dataToSign, err := json.Marshal(req.Data)
+	assert.Nil(t, err)
+	fmt.Printf("data:%s\n", dataToSign)
+	sig, err := signer.Sign(dataToSign)
+	assert.Nil(t, err)
 	req.Sig = hex.EncodeToString(sig)
 
-	tmp ,_:= json.Marshal(req)
+	tmp, _ := json.Marshal(req)
 	//tmphex := hex.EncodeToString(tmp)
 	//fmt.Printf("%s",tmphex)
-	fmt.Printf("req:%s\n",tmp)
+	fmt.Printf("req:%s\n", tmp)
 
 	taskid, err := sdk.RequestOscore(req)
 	assert.Nil(t, err)
@@ -112,8 +111,7 @@ func TestOscoreSDK_RequestOscore(t *testing.T) {
 }
 
 func TestNewOscoreSDK_GetUserTask(t *testing.T) {
-	sdk, err := NewOscoreSDK("http://172.168.3.38:8080/query")
-	//sdk, err := NewOscoreSDK("http://localhost:8080/query")
+	sdk, err := NewOscoreSDK("http://localhost:8080/query")
 	assert.Nil(t, err)
 
 	task, err := sdk.GetUserTask("key", 123)
