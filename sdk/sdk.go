@@ -9,15 +9,15 @@ import (
 	"github.com/orange-protocol/orange-sdk-go/graphql"
 )
 
-type OscoreSDK struct {
+type OrangeSDK struct {
 	client *graphql.Client
 }
 
-func NewOscoreSDK(url string) (*OscoreSDK, error) {
-	return &OscoreSDK{client: graphql.NewClient(url)}, nil
+func NewOrangeSDK(url string) (*OrangeSDK, error) {
+	return &OrangeSDK{client: graphql.NewClient(url)}, nil
 }
 
-func (sdk *OscoreSDK) GetAlgorithmProviders() ([]*AlgorithmProvider, error) {
+func (sdk *OrangeSDK) GetAlgorithmProviders() ([]*AlgorithmProvider, error) {
 	req := graphql.NewRequest(GetAllAlgorithmProvidersReq)
 	resp := &GetAlgorithmProvidersResp{}
 	err := sdk.sendRequest(req, resp)
@@ -25,7 +25,7 @@ func (sdk *OscoreSDK) GetAlgorithmProviders() ([]*AlgorithmProvider, error) {
 	return resp.GetAllAlgorithmProviders, err
 }
 
-func (sdk *OscoreSDK) GetDataProviders() ([]*DataProvider, error) {
+func (sdk *OrangeSDK) GetDataProviders() ([]*DataProvider, error) {
 	req := graphql.NewRequest(GetAllDataProvidersReq)
 	resp := &GetDataProvidersResp{}
 	err := sdk.sendRequest(req, resp)
@@ -35,7 +35,7 @@ func (sdk *OscoreSDK) GetDataProviders() ([]*DataProvider, error) {
 	return resp.GetAllDataProviders, nil
 }
 
-func (sdk *OscoreSDK) GetAlgorithmMethods(apdid string) ([]*ProviderMethod, error) {
+func (sdk *OrangeSDK) GetAlgorithmMethods(apdid string) ([]*ProviderMethod, error) {
 	req := graphql.NewRequest(GetAlgorithmProviderMethodsReq)
 	req.Var("apdid", apdid)
 	resp := &GetAlgorithmProviderMethodResp{}
@@ -43,7 +43,7 @@ func (sdk *OscoreSDK) GetAlgorithmMethods(apdid string) ([]*ProviderMethod, erro
 
 	return resp.GetAlgorithmProviderMethods, err
 }
-func (sdk *OscoreSDK) GetDataMethods(dpdid string) ([]*ProviderMethod, error) {
+func (sdk *OrangeSDK) GetDataMethods(dpdid string) ([]*ProviderMethod, error) {
 	req := graphql.NewRequest(GetDataProviderMethodsReq)
 	req.Var("dpdid", dpdid)
 	resp := &GetDataProviderMethodResp{}
@@ -52,20 +52,20 @@ func (sdk *OscoreSDK) GetDataMethods(dpdid string) ([]*ProviderMethod, error) {
 	return resp.GetDataProviderMethods, err
 }
 
-func (sdk *OscoreSDK) RequestOscore(roreq *RequestOscoreReq) (int64, error) {
-	tmps := getRequestOscoreReqStr(roreq)
+func (sdk *OrangeSDK) RequestOrangescore(roreq *RequestOrangeScoreReq) (int64, error) {
+	tmps := getRequestOrangescoreReqStr(roreq)
 	fmt.Printf("%s\n", tmps)
 	req := graphql.NewRequest(tmps)
 
 	tmp, _ := json.Marshal(req.Vars())
 	fmt.Printf("vars:%s\n", tmp)
 
-	resp := &GetOscoreResp{}
+	resp := &GetOrangeScoreResp{}
 	err := sdk.sendRequest(req, resp)
-	return resp.Oscore, err
+	return resp.OrangeScore, err
 }
 
-func (sdk *OscoreSDK) GetUserTask(key string, taskId int64) (*UserTasks, error) {
+func (sdk *OrangeSDK) GetUserTask(key string, taskId int64) (*UserTasks, error) {
 	req := graphql.NewRequest(GetUserTask)
 	req.Var("key", key)
 	req.Var("taskId", taskId)
@@ -76,7 +76,7 @@ func (sdk *OscoreSDK) GetUserTask(key string, taskId int64) (*UserTasks, error) 
 	return resp.GetUserTask, err
 }
 
-func getRequestOscoreReqStr(req *RequestOscoreReq) string {
+func getRequestOrangescoreReqStr(req *RequestOrangeScoreReq) string {
 	s := "mutation{requestOscore(input:{appdid:\"%s\",data:{userdid:\"%s\",apdid:\"%s\",apmethod:\"%s\",dpdid:\"%s\",dpmethod:\"%s\",overwriteOld:%v,wallets:[$walletsinfo$]},sig:\"%s\"})}"
 	str := ""
 	for _, w := range req.Data.Wallets {
@@ -90,7 +90,7 @@ func getRequestOscoreReqStr(req *RequestOscoreReq) string {
 	return fmt.Sprintf(s, req.AppDid, req.Data.Userdid, req.Data.Apdid, req.Data.Apmethod, req.Data.Dpdid, req.Data.Dpmethod, req.Data.OverwriteOld, req.Sig)
 }
 
-func (sdk *OscoreSDK) sendRequest(req *graphql.Request, resp interface{}) error {
+func (sdk *OrangeSDK) sendRequest(req *graphql.Request, resp interface{}) error {
 	// set header fields
 	req.Header.Set("Cache-Control", "no-cache")
 	// define a Context for the request

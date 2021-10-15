@@ -38,7 +38,7 @@ type ProviderMethod struct {
 	ResultSchema string `json:"resultSchema"`
 }
 
-type RequestOscoreData struct {
+type RequestOrangeScoreData struct {
 	Userdid      string        `json:"userdid"`
 	Apdid        string        `json:"apdid"`
 	Apmethod     string        `json:"apmethod"`
@@ -48,10 +48,10 @@ type RequestOscoreData struct {
 	Wallets      []*UserWallet `json:"wallets"`
 }
 
-type RequestOscoreReq struct {
-	AppDid string            `json:"appdid"`
-	Data   RequestOscoreData `json:"data"`
-	Sig    string            `json:"sig"`
+type RequestOrangeScoreReq struct {
+	AppDid string                 `json:"appdid"`
+	Data   RequestOrangeScoreData `json:"data"`
+	Sig    string                 `json:"sig"`
 }
 
 type UserWallet struct {
@@ -98,6 +98,6 @@ type GetUserTaskResp struct {
 	GetUserTask *UserTasks `json:"getUserTask"`
 }
 
-type GetOscoreResp struct {
-	Oscore int64 `json:"requestOscore"`
+type GetOrangeScoreResp struct {
+	OrangeScore int64 `json:"requestOscore"`
 }

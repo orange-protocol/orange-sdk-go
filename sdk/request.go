@@ -58,7 +58,7 @@ var (
 			}
 		}
 	`
-	GetOscoreReq = `
+	GetOrangescoreReq = `
 		mutation{
 				requestOscore(input:{
 					key:$key,

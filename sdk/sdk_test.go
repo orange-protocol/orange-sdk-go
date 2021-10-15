@@ -10,8 +10,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestOscoreSDK_GetAlgorithmProviders(t *testing.T) {
-	sdk, err := NewOscoreSDK("http://localhost:8080/query")
+func TestOrangeSDK_GetAlgorithmProviders(t *testing.T) {
+	sdk, err := NewOrangeSDK("http://localhost:8080/query")
 	assert.Nil(t, err)
 	aps, err := sdk.GetAlgorithmProviders()
 	assert.Nil(t, err)
@@ -20,8 +20,8 @@ func TestOscoreSDK_GetAlgorithmProviders(t *testing.T) {
 
 }
 
-func TestOscoreSDK_GetDataProviders(t *testing.T) {
-	sdk, err := NewOscoreSDK("http://localhost:8080/query")
+func TestOrangeSDK_GetDataProviders(t *testing.T) {
+	sdk, err := NewOrangeSDK("http://localhost:8080/query")
 	assert.Nil(t, err)
 	aps, err := sdk.GetDataProviders()
 	assert.Nil(t, err)
@@ -29,8 +29,8 @@ func TestOscoreSDK_GetDataProviders(t *testing.T) {
 	assert.Greater(t, len(aps), 0)
 }
 
-func TestOscoreSDK_GetAlgorithmMethods(t *testing.T) {
-	sdk, err := NewOscoreSDK("http://localhost:8080/query")
+func TestOrangeSDK_GetAlgorithmMethods(t *testing.T) {
+	sdk, err := NewOrangeSDK("http://localhost:8080/query")
 	assert.Nil(t, err)
 	aps, err := sdk.GetAlgorithmProviders()
 	assert.Nil(t, err)
@@ -46,8 +46,8 @@ func TestOscoreSDK_GetAlgorithmMethods(t *testing.T) {
 	fmt.Printf("method:%s\n", methods[0].Name)
 }
 
-func TestOscoreSDK_GetDataMethods(t *testing.T) {
-	sdk, err := NewOscoreSDK("http://localhost:8080/query")
+func TestOrangeSDK_GetDataMethods(t *testing.T) {
+	sdk, err := NewOrangeSDK("http://localhost:8080/query")
 	assert.Nil(t, err)
 	dps, err := sdk.GetDataProviders()
 	assert.Nil(t, err)
@@ -65,12 +65,12 @@ func TestOscoreSDK_GetDataMethods(t *testing.T) {
 	}
 }
 
-func TestOscoreSDK_RequestOscore(t *testing.T) {
-	sdk, err := NewOscoreSDK("http://localhost:8080/query")
+func TestOrangeSDK_RequestOrangeScore(t *testing.T) {
+	sdk, err := NewOrangeSDK("http://localhost:8080/query")
 	assert.Nil(t, err)
-	req := &RequestOscoreReq{
+	req := &RequestOrangeScoreReq{
 		AppDid: "did:ont:ARNzB1pTkG61NDwxwzJfNJF8BqcZjpfNev",
-		Data: RequestOscoreData{
+		Data: RequestOrangeScoreData{
 			Userdid:      "did:ont:AGAMr5P2Ngi7SGvhKd3s5vWTWpid5uGywL",
 			Apdid:        "did:ont:testap",
 			Apmethod:     "calc30xWithDefi",
@@ -105,13 +105,13 @@ func TestOscoreSDK_RequestOscore(t *testing.T) {
 	//fmt.Printf("%s",tmphex)
 	fmt.Printf("req:%s\n", tmp)
 
-	taskid, err := sdk.RequestOscore(req)
+	taskid, err := sdk.RequestOrangescore(req)
 	assert.Nil(t, err)
 	fmt.Printf("taskid:%d\n", taskid)
 }
 
-func TestNewOscoreSDK_GetUserTask(t *testing.T) {
-	sdk, err := NewOscoreSDK("http://localhost:8080/query")
+func TestOrangeSDK_GetUserTask(t *testing.T) {
+	sdk, err := NewOrangeSDK("http://localhost:8080/query")
 	assert.Nil(t, err)
 
 	task, err := sdk.GetUserTask("key", 123)

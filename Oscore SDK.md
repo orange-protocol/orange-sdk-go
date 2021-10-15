@@ -75,12 +75,12 @@ type UserTasks {
     issueTxhash:String
 }
 
-input RequestOscoreReq{
+input RequestOrangeScoreReq{
     appdid:String!
-    data:RequestOscoreData!
+    data:RequestOrangeScoreData!
     sig:String!
 }
-input RequestOscoreData {
+input RequestOrangeScoreData {
     userdid:String!
     apdid:String!
     apmethod:String!
@@ -105,7 +105,7 @@ type Query {
 }
 
 type Mutation {
-  requestOscore(input:RequestOscoreReq):Int!
+  requestOrangeScore(input:RequestOrangeScoreReq):Int!
 }
 
 ```
@@ -218,24 +218,24 @@ type ProviderMethod struct {
 
 ### 3.5 申请计算Orange score
 
-申请计算OScore, 计算是一个异步过程，本次只返回申请的task id
+申请计算OrangeScore, 计算是一个异步过程，本次只返回申请的task id
 
 ### golang
 
-```RequestOscore```
+```RequestOrangeScore```
 
-parameters: *RequestOscoreReq
+parameters: *RequestOrangeScoreReq
 
 return int64
 
 ```
-type RequestOscoreReq struct {
+type RequestOrangeScoreReq struct {
 	AppDid string            `json:"appDid"`                    //app did
-	Data   RequestOscoreData `json:"data"`                      //request data
+	Data   RequestOrangeScoreData `json:"data"`                      //request data
 	Sig    string            `json:"sig"`                       //signature for data by did  
 }
 
-type RequestOscoreData struct {
+type RequestOrangeScoreData struct {
 	Userdid      string        `json:"userDid"`                 //用户的DID
     Apdid        string        `json:"apdid"`                   //算法提供方的DID
     Apmethod     string        `json:"apmethod"`                //算法提供方的接口名称 
@@ -258,7 +258,7 @@ type UserWallet struct {
 
 ### 3.6 查询用户Orange score task
 
-根据task id 查询oscore task 信息
+根据task id 查询orange score task 信息
 
 #### golang
 
@@ -283,8 +283,8 @@ type UserTasks struct {
 	CreateTime  string  `json:"createTime"`
 	UpdateTime  string  `json:"updateTime"`
 	TaskStatus  string  `json:"taskStatus"`
-	TaskResult  *string `json:"taskResult"`                             //oscore point
-	ResultFile  *string `json:"resultFile"`                             //oscore credential file       
+	TaskResult  *string `json:"taskResult"`                             // point
+	ResultFile  *string `json:"resultFile"`                             // credential file       
 	IssueTxhash *string `json:"issueTxhash"`                            //transaction hash for the credential on ontology
 }
 ```
@@ -302,8 +302,8 @@ github.com/orange-protocol/orange-sdk-go latest
 ```
 
 ```golang
-func TestOscoreSDK_GetAlgorithmProviders(t *testing.T) {
-	sdk, err := NewOscoreSDK("http://localhost:8080/query")
+func TestOrangeSDK_GetAlgorithmProviders(t *testing.T) {
+	sdk, err := NewOrangeSDK("http://localhost:8080/query")
 	assert.Nil(t, err)
 	aps, err := sdk.GetAlgorithmProviders()
 	assert.Nil(t, err)
